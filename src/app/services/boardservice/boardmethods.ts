@@ -1,3 +1,6 @@
+import { knightMove } from "src/app/chesslogic/mouvements/knight";
+import { pawnMove } from "src/app/chesslogic/mouvements/pawn";
+
 function createBoard(board:any) :void {
     for (let i = 0; i < 8; i++) {
       board[i] = [];
@@ -54,6 +57,25 @@ function cleanUp(possiblemoves:number[][],board:any):void{
   }
 }
 
+function possibleMoves(name:string,position:number[],color:string,board:any): number[][]{
+  let result:number[][]=[]
+  switch(name){
+    case "pawn":
+      result=pawnMove(board,position,color)
+      break
+    case "knight":
+      result=knightMove(board,position,color)
+      break
+    default:
+      result=[]
+
+  }
 
 
-export {createBoard,showPossibleMoves,cleanUp}
+  return result
+
+}
+
+
+
+export {createBoard,showPossibleMoves,cleanUp,possibleMoves}
