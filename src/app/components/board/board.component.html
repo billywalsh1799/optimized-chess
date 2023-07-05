@@ -5,29 +5,25 @@
     </tr>
     <tr *ngFor="let row of [8, 7, 6, 5, 4, 3, 2, 1]; let i = index">
     <td [ngClass]="{'row-label':true}">{{ row }}</td>
-    <td class="cell" *ngFor="let col of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']; let j = index" [ngClass]="{ 'white-cell': (i+j) % 2 == 0, 'black-cell': (i+j) % 2 == 1 }" (click)="makeMove(i,j)">
-        <div *ngIf="board[i][j].name==='empty' && board[i][j].possibleMove">
-        <img class="possible-move"  src="../../assets/possible-move.png"/>
+    <td class="cell" *ngFor="let col of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']; let j = index" [ngClass]="{ 'white-cell': (i+j) % 2 == 0, 'black-cell': (i+j) % 2 == 1,'capture-cell':board[i][j].inCapture,'selected-cell':board[i][j].isSelected }" (click)="makeMove(i,j)">
+        <div *ngIf="!board[i][j].piece && board[i][j].possibleMove">
+            <img class="possible-move"  src="../../assets/possible-move.png"/>
         </div>
-        <div  *ngIf="board[i][j].name!=='empty' && board[i][j].color==='black' " >
-            <div [ngSwitch]="board[i][j].name"   [ngClass]="{'capture-cell':board[i][j].inCapture,'selected-cell':board[i][j].isSelected}">
+        <div  *ngIf="board[i][j].piece && board[i][j].piece.color==='black'" [ngSwitch]="board[i][j].piece.name"> 
             <img  *ngSwitchCase="'pawn'"  class="pieceLogo" src="../../assets/pieces/black/pawn.png"/>
             <img  *ngSwitchCase="'rook'"  class="pieceLogo" src="../../assets/pieces/black/rook.png"/>
             <img  *ngSwitchCase="'knight'"  class="pieceLogo" src="../../assets/pieces/black/knight.png"/>
             <img  *ngSwitchCase="'bishop'"  class="pieceLogo" src="../../assets/pieces/black/bishop.png"/>
             <img  *ngSwitchCase="'queen'"  class="pieceLogo" src="../../assets/pieces/black/queen.png"/>
             <img  *ngSwitchCase="'king'"  class="pieceLogo" src="../../assets/pieces/black/king.png"/>
-            </div>
         </div>
-        <div  *ngIf="board[i][j].name!=='empty' && board[i][j].color==='white' " >
-            <div [ngSwitch]="board[i][j].name"   [ngClass]="{'capture-cell':board[i][j].inCapture,'selected-cell':board[i][j].isSelected}">
+        <div  *ngIf="board[i][j].piece && board[i][j].piece.color==='white'" [ngSwitch]="board[i][j].piece.name" >
             <img  *ngSwitchCase="'pawn'"  class="pieceLogo" src="../../assets/pieces/white/pawn.png"/>
             <img  *ngSwitchCase="'rook'"  class="pieceLogo" src="../../assets/pieces/white/rook.png"/>
             <img  *ngSwitchCase="'knight'"  class="pieceLogo" src="../../assets/pieces/white/knight.png"/>
             <img  *ngSwitchCase="'bishop'"  class="pieceLogo" src="../../assets/pieces/white/bishop.png"/>
             <img  *ngSwitchCase="'queen'"  class="pieceLogo" src="../../assets/pieces/white/bishop.png"/>
             <img  *ngSwitchCase="'king'"  class="pieceLogo" src="../../assets/pieces/white/king.png"/>
-            </div>
         </div>
     </td>
     </tr>

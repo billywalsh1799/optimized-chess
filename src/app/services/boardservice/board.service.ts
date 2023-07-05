@@ -6,7 +6,13 @@ import { createBoard } from './boardmethods';
 })
 export class BoardService {
 
+  
+
   board: any = [];
+  selectedPiece:any=null
+
+  blackKingPosition:number[]=[0,4]
+  whiteKingPosition:number[]=[7,4]
   
 
   constructor() {
@@ -17,5 +23,33 @@ export class BoardService {
     return this.board
   }
 
-   
+  clickPiece(i:number,j:number){
+
+    //selectPiece
+    if (this.board[i][j].piece!==false && this.selectedPiece===null){
+      this.selectedPiece=this.board[i][j].piece
+      this.board[i][j].isSelected=true
+      //possible moves and captures
+      
+    }
+
+    //piece selected make move
+    else if(this.selectedPiece!==null ){
+      let [x,y]=this.selectedPiece.position
+      if ((x!==i || y!==j)){
+        //make made
+        //movemade=this.selectedPiece.move([x,y],[i,j],this.board,this.PM[x][y],false)
+       
+        this.board[i][j]=this.board[x][y]
+        this.board[i][j].piece.position=[i,j]
+        this.board[x][y]={piece:null,inCapture:false,possibleMove:false,isSelected:false}
+        this.board[x][y].isSelected=false
+        this.board[i][j].isSelected=false
+        this.selectedPiece=null
+      }
+    }
+  }
+
+
+
 }

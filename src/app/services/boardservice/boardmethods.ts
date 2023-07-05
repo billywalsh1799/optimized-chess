@@ -2,36 +2,58 @@ function createBoard(board:any) :void {
     for (let i = 0; i < 8; i++) {
       board[i] = [];
       for (let j = 0; j < 8; j++) {
-        board[i][j] = {name:"empty",possibleMove:true};
+        board[i][j] = {piece:null,inCapture:false,possibleMove:false,isSelected:false};
       }
     }
 
     for(let j=0;j<8;j++){
-      board[1][j] ={name:"pawn",color:"black",position:[1,j],isSelected:false,inCapture:false}
+      board[1][j] ={piece:{name:"pawn",color:"black",position:[1,j]},inCapture:false,possibleMove:false,isSelected:false}
     }
     
       for(let j=0;j<8;j++){
-        board[6][j] ={name:"pawn",color:"white",position:[6,j],isSelected:false,inCapture:false}
+        board[6][j] ={piece:{name:"pawn",color:"white",position:[6,j]},inCapture:false,possibleMove:false,isSelected:false}
     }
       
       
-      board[0][0]={name:"rook",color:"black",position:[0,0],isSelected:false,inCapture:false}
-      board[0][1]={name:"knight",color:"black",position:[0,1],isSelected:false,inCapture:false}
-      board[0][2]={name:"bishop",color:"black",position:[0,2],isSelected:false,inCapture:false}
-      board[0][3]={name:"queen",color:"black",position:[0,3],isSelected:false,inCapture:false}
-      board[0][4]={name:"king",color:"black",position:[0,4],isSelected:false,inCapture:false}
-      board[0][5]={name:"bishop",color:"black",position:[0,5],isSelected:false,inCapture:false}
-      board[0][6]={name:"knight",color:"black",position:[0,6],isSelected:false,inCapture:false}
-      board[0][7]={name:"rook",color:"black",position:[0,7],isSelected:false,inCapture:false}
-      board[7][0]={name:"rook",color:"white",position:[7,0],isSelected:false,inCapture:false}
-      board[7][1]={name:"knight",color:"white",position:[7,1],isSelected:false,inCapture:false}
-      board[7][2]={name:"bishop",color:"white",position:[7,2],isSelected:false,inCapture:false}
-      board[7][3]={name:"queen",color:"white",position:[7,3],isSelected:false,inCapture:false}
-      board[7][4]={name:"king",color:"white",position:[7,4],isSelected:false,inCapture:false}
-      board[7][5]={name:"bishop",color:"white",position:[7,5],isSelected:false,inCapture:false}
-      board[7][6]={name:"knight",color:"white",position:[7,6],isSelected:false,inCapture:false}
-      board[7][7]={name:"rook",color:"white",position:[7,7],isSelected:false,inCapture:false}
+      board[0][0]={piece:{name:"rook",color:"black",position:[0,0]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][1]={piece:{name:"knight",color:"black",position:[0,1]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][2]={piece:{name:"bishop",color:"black",position:[0,2]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][3]={piece:{name:"queen",color:"black",position:[0,3]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][4]={piece:{name:"king",color:"black",position:[0,4]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][5]={piece:{name:"bishop",color:"black",position:[0,5]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][6]={piece:{name:"knight",color:"black",position:[0,6]},inCapture:false,possibleMove:false,isSelected:false}
+      board[0][7]={piece:{name:"rook",color:"black",position:[0,7]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][0]={piece:{name:"rook",color:"white",position:[7,0]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][1]={piece:{name:"knight",color:"white",position:[7,1]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][2]={piece:{name:"bishop",color:"white",position:[7,2]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][3]={piece:{name:"queen",color:"white",position:[7,3]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][4]={piece:{name:"king",color:"white",position:[7,4]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][5]={piece:{name:"bishop",color:"white",position:[7,5]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][6]={piece:{name:"knight",color:"white",position:[7,6]},inCapture:false,possibleMove:false,isSelected:false}
+      board[7][7]={piece:{name:"rook",color:"white",position:[7,7]},inCapture:false,possibleMove:false,isSelected:false}
       
   }
 
-export {createBoard}
+  function showPossibleMoves(possiblemoves:number[][],board:any):void{
+    for(let move of possiblemoves){
+      let [a,b]=move
+      if(board[a][b].piece)
+        board[a][b].inCapture=true
+      else
+        board[a][b].possibleMove=true
+  }
+  }
+
+function cleanUp(possiblemoves:number[][],board:any):void{
+    for(let move of possiblemoves){
+      let [a,b]=move
+      if(board[a][b].piece)
+        board[a][b].inCapture=false
+      else
+        board[a][b].possibleMove=false
+  }
+}
+
+
+
+export {createBoard,showPossibleMoves,cleanUp}
