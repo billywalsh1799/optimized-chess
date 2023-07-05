@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { createBoard } from './boardmethods';
+import { cleanUp, createBoard, showPossibleMoves } from './boardmethods';
+import { pawnMove } from 'src/app/chesslogic/mouvements/pawn';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class BoardService {
 
   board: any = [];
   selectedPiece:any=null
+  selectedPieceMoves: number[][]=[]
 
   blackKingPosition:number[]=[0,4]
   whiteKingPosition:number[]=[7,4]
@@ -31,6 +33,11 @@ export class BoardService {
       this.board[i][j].isSelected=true
       //possible moves and captures
       
+      if(this.selectedPiece.name==="pawn"){
+        this.selectedPieceMoves=pawnMove(this.board,[i,j],this.selectedPiece.color)
+        showPossibleMoves(this.selectedPieceMoves,this.board)
+      }
+      
     }
 
     //piece selected make move
@@ -45,21 +52,31 @@ export class BoardService {
         this.board[i][j].piece.position=[i,j]
         this.board[x][y]={piece:null,inCapture:false,possibleMove:false,isSelected:false}
 
+        //cleanup
+        cleanUp(this.selectedPieceMoves,this.board)
+        this.selectedPieceMoves=[]
+
         //this.board[x][y].isSelected=false
 
         this.board[i][j].isSelected=false
         this.selectedPiece=null
       }
 
+      //selects other pice from same side
       else if((x!==i || y!==j) && (toSquare && toSquare.color===this.selectedPiece.color)){
+        cleanUp(this.selectedPieceMoves,this.board)
         this.selectedPiece=this.board[i][j].piece
+        this.selectedPieceMoves=pawnMove(this.board,[i,j],this.selectedPiece.color)
+        showPossibleMoves(this.selectedPieceMoves,this.board)
         this.board[i][j].isSelected=true
         this.board[x][y].isSelected=false
       }
 
+      //selects same piece
       else if(x===i && y===j){
         this.board[x][y].isSelected=false
         this.selectedPiece=null
+        cleanUp(this.selectedPieceMoves,this.board)
       }
 
 
