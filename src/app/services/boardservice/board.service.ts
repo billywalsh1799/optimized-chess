@@ -26,7 +26,7 @@ export class BoardService {
   clickPiece(i:number,j:number){
 
     //selectPiece
-    if (this.board[i][j].piece!==false && this.selectedPiece===null){
+    if (this.board[i][j].piece && this.selectedPiece===null){
       this.selectedPiece=this.board[i][j].piece
       this.board[i][j].isSelected=true
       //possible moves and captures
@@ -36,18 +36,38 @@ export class BoardService {
     //piece selected make move
     else if(this.selectedPiece!==null ){
       let [x,y]=this.selectedPiece.position
-      if ((x!==i || y!==j)){
+      let toSquare=this.board[i][j].piece
+      if ((x!==i || y!==j) && ((toSquare && toSquare.color!==this.selectedPiece.color)|| !toSquare)){
         //make made
         //movemade=this.selectedPiece.move([x,y],[i,j],this.board,this.PM[x][y],false)
        
         this.board[i][j]=this.board[x][y]
         this.board[i][j].piece.position=[i,j]
         this.board[x][y]={piece:null,inCapture:false,possibleMove:false,isSelected:false}
-        this.board[x][y].isSelected=false
+
+        //this.board[x][y].isSelected=false
+
         this.board[i][j].isSelected=false
         this.selectedPiece=null
       }
+
+      else if((x!==i || y!==j) && (toSquare && toSquare.color===this.selectedPiece.color)){
+        this.selectedPiece=this.board[i][j].piece
+        this.board[i][j].isSelected=true
+        this.board[x][y].isSelected=false
+      }
+
+      else if(x===i && y===j){
+        this.board[x][y].isSelected=false
+        this.selectedPiece=null
+      }
+
+
+
+      //this.selectedPiece=null
+      //this.board[i][j].isSelected=false
     }
+    
   }
 
 
