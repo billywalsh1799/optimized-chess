@@ -1,3 +1,4 @@
+import { bishopMove } from "src/app/chesslogic/mouvements/bishop";
 import { knightMove } from "src/app/chesslogic/mouvements/knight";
 import { pawnMove } from "src/app/chesslogic/mouvements/pawn";
 
@@ -63,9 +64,15 @@ function possibleMoves(name:string,position:number[],color:string,board:any): nu
     case "pawn":
       result=pawnMove(board,position,color)
       break
+
     case "knight":
       result=knightMove(board,position,color)
       break
+
+    case "bishop":
+      result=bishopMove(board,position,color)
+      break
+      
     default:
       result=[]
 
