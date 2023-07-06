@@ -1,6 +1,7 @@
 import { bishopMove } from "src/app/chesslogic/mouvements/bishop";
 import { knightMove } from "src/app/chesslogic/mouvements/knight";
 import { pawnMove } from "src/app/chesslogic/mouvements/pawn";
+import { queenMove } from "src/app/chesslogic/mouvements/queen";
 import { rookMove } from "src/app/chesslogic/mouvements/rook";
 
 function createBoard(board:any) :void {
@@ -76,6 +77,10 @@ function possibleMoves(name:string,position:number[],color:string,board:any): nu
     
     case "rook":
       result=rookMove(board,position,color)
+      break
+
+    case "queen":
+      result=queenMove(board,position,color)
       break
     
 
