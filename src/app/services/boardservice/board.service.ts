@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { cleanUp, createBoard, possibleMoves, showPossibleMoves } from './boardmethods';
+import { Square, cleanUp, createBoard, possibleMoves, showPossibleMoves } from './boardmethods';
 import { pawnMove } from 'src/app/chesslogic/mouvements/pawn';
 import { knightMove } from 'src/app/chesslogic/mouvements/knight';
 
@@ -7,7 +7,7 @@ import { knightMove } from 'src/app/chesslogic/mouvements/knight';
   providedIn: 'root'
 })
 export class BoardService {
-
+  
   
 
   board: any = [];
