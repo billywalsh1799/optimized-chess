@@ -1,6 +1,7 @@
 import { bishopMove } from "src/app/chesslogic/mouvements/bishop";
 import { knightMove } from "src/app/chesslogic/mouvements/knight";
 import { pawnMove } from "src/app/chesslogic/mouvements/pawn";
+import { rookMove } from "src/app/chesslogic/mouvements/rook";
 
 function createBoard(board:any) :void {
     for (let i = 0; i < 8; i++) {
@@ -72,7 +73,12 @@ function possibleMoves(name:string,position:number[],color:string,board:any): nu
     case "bishop":
       result=bishopMove(board,position,color)
       break
-      
+    
+    case "rook":
+      result=rookMove(board,position,color)
+      break
+    
+
     default:
       result=[]
 
