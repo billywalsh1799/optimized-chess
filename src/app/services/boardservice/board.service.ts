@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Square, cleanUp, createBoard, possibleMoves, showPossibleMoves } from './boardmethods';
-import { pawnMove } from 'src/app/chesslogic/mouvements/pawn';
-import { knightMove } from 'src/app/chesslogic/mouvements/knight';
+import { Square, cleanUp, createBoard, generateEmptySquare, generatePiece, possibleMoves, showPossibleMoves } from './boardmethods';
+import { UpDownLeftRightCheck, diagonalCheck } from 'src/app/chesslogic/check/kingcheck';
+import { checkLegalMoves } from 'src/app/chesslogic/check/legalmoves';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,11 @@ export class BoardService {
   blackKingPosition:number[]=[0,4]
   whiteKingPosition:number[]=[7,4]
   
+  legalMoves:any[]=[]
 
   constructor() {
     createBoard(this.board)
+    this.legalMoves=checkLegalMoves(this.board,this.whiteKingPosition)
   }
 
   getBoard() {
@@ -29,23 +32,15 @@ export class BoardService {
   clickPiece(i:number,j:number){
 
     //selectPiece
-    if (this.board[i][j].piece && this.selectedPiece===null){
+    if (this.board[i][j].piece && this.selectedPiece===null && this.legalMoves.length){
       this.selectedPiece=this.board[i][j].piece
       this.board[i][j].isSelected=true
       let {name,position,color}=this.selectedPiece
       //possible moves and captures
       
-     /*  if(this.selectedPiece.name==="pawn"){
-        this.selectedPieceMoves=pawnMove(this.board,[i,j],this.selectedPiece.color)
-        showPossibleMoves(this.selectedPieceMoves,this.board)
-      }
+    
 
-      else if(this.selectedPiece.name==="knight"){
-        this.selectedPieceMoves=knightMove(this.board,[i,j],this.selectedPiece.color)
-        showPossibleMoves(this.selectedPieceMoves,this.board)
-      } */
-
-      this.selectedPieceMoves=possibleMoves(name,position,color,this.board)
+      this.selectedPieceMoves=possibleMoves(name,position,color,this.board,color==="white"? this.whiteKingPosition:this.blackKingPosition)
       showPossibleMoves(this.selectedPieceMoves,this.board)
 
 
@@ -62,9 +57,36 @@ export class BoardService {
         //make made
         //movemade=this.selectedPiece.move([x,y],[i,j],this.board,this.PM[x][y],false)
        
-        this.board[i][j]=this.board[x][y]
-        this.board[i][j].piece.position=[i,j]
-        this.board[x][y]={piece:null,inCapture:false,possibleMove:false,isSelected:false}
+       /*  this.board[i][j]=this.board[x][y]
+        this.board[i][j].piece.position=[i,j] */
+
+        this.board[i][j]=generatePiece(this.selectedPiece.name,this.selectedPiece.color,[i,j])
+        this.board[x][y]=generateEmptySquare()
+        
+        //check if the king has moved
+        if(this.selectedPiece.name==="king" && this.selectedPiece.color==="white"){
+          this.whiteKingPosition=[i,j]
+          console.log("white king has moved to ",this.whiteKingPosition)
+        }
+          
+        
+        else if(this.selectedPiece.name==="king" && this.selectedPiece.color==="black"){
+          this.blackKingPosition=[i,j]
+          console.log("black king has moved to ",this.blackKingPosition)  
+        }
+
+        // verifiy if the king is in check
+
+        let blackcheck=diagonalCheck(this.board,'black',this.blackKingPosition)|| UpDownLeftRightCheck(this.board,'black',this.blackKingPosition)
+        let whitecheck=diagonalCheck(this.board,'white',this.whiteKingPosition)|| UpDownLeftRightCheck(this.board,'white',this.whiteKingPosition)
+
+        let [xb,yb]=this.blackKingPosition
+        let [xw,yw]=this.whiteKingPosition
+
+        this.board[xb][yb].inCapture=blackcheck 
+        this.board[xw][yw].inCapture=whitecheck
+          
+
 
         //cleanup
         cleanUp(this.selectedPieceMoves,this.board)
@@ -81,7 +103,7 @@ export class BoardService {
         cleanUp(this.selectedPieceMoves,this.board)
         this.selectedPiece=this.board[i][j].piece
         let {name,color,position}=this.selectedPiece
-        this.selectedPieceMoves=possibleMoves(name,position,color,this.board)
+        this.selectedPieceMoves=possibleMoves(name,position,color,this.board,color==="white"? this.whiteKingPosition:this.blackKingPosition)
         showPossibleMoves(this.selectedPieceMoves,this.board)
         this.board[i][j].isSelected=true
         this.board[x][y].isSelected=false

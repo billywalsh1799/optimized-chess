@@ -11,8 +11,9 @@ type Piece={
   position:number[]
 }
 
+
 type Square={
-  piece:(boolean | Piece )
+  piece:(Piece | null)
   inCapture:boolean,
   possibleMove:boolean,
   isSelected:boolean
@@ -26,7 +27,7 @@ type Square={
 
 } */
 function generateEmptySquare(){
-  return {piece:false,inCapture:false,possibleMove:false,isSelected:false}
+  return {piece:null,inCapture:false,possibleMove:false,isSelected:false}
 }
 
 function generatePiece(name:string,color:string,position:number[]){
@@ -75,27 +76,27 @@ function cleanUp(possiblemoves:number[][],board:any):void{
   }
 }
 
-function possibleMoves(name:string,position:number[],color:string,board:any): number[][]{
+function possibleMoves(name:string,position:number[],color:string,board:any,kingPosition:number[]): number[][]{
   let result:number[][]=[]
   switch(name){
     case "pawn":
-      result=pawnMove(board,position,color)
+      result=pawnMove(board,position,color,kingPosition)
       break
 
     case "knight":
-      result=knightMove(board,position,color)
+      result=knightMove(board,position,color,kingPosition)
       break
 
     case "bishop":
-      result=bishopMove(board,position,color)
+      result=bishopMove(board,position,color,kingPosition)
       break
     
     case "rook":
-      result=rookMove(board,position,color)
+      result=rookMove(board,position,color,kingPosition)
       break
 
     case "queen":
-      result=queenMove(board,position,color)
+      result=queenMove(board,position,color,kingPosition)
       break
     case "king":
       result=kingMove(board,position,color)
@@ -113,4 +114,4 @@ function possibleMoves(name:string,position:number[],color:string,board:any): nu
 
 
 
-export {createBoard,showPossibleMoves,cleanUp,possibleMoves,Piece,Square}
+export {createBoard,showPossibleMoves,cleanUp,possibleMoves,generateEmptySquare,generatePiece,Piece,Square}
