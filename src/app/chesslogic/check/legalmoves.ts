@@ -16,8 +16,10 @@ function checkLegalMoves(board :any,kingPosition:number[]):any{
         for(let j=0;j<8;j++){
             if(board[i][j].piece && board[i][j].piece.color===color){
 
-                let {name,color,position}=board[i][j].piece
-                let possiblemoves=possibleMoves(name,position,color,board,kingPosition)
+                /* let {name,color,position}=board[i][j].piece */
+                let tempPiece=board[i][j].piece
+                let tempName=tempPiece.name,tempColor=tempPiece.color,tempPosition=tempPiece.position
+                let possiblemoves=possibleMoves(tempName,tempPosition,tempColor,board,kingPosition)
                 if (kingInCheck){
                     let p=[]
                     for(let move of possiblemoves){
@@ -49,19 +51,23 @@ function escapeCheck(board: any,from: number[],to: number[],color:string,kingPos
     let tempBoard=copyBoard(board)
     let [x,y]=from
     let [a,b]=to
-    let {name,pcolor,position}=tempBoard[x][y].piece
-    //tempBoard[x][y].piece.move(from,to,tempBoard,[],true)
-    tempBoard[x][y]=generateEmptySquare()
-    tempBoard[a][b]=generatePiece(name,pcolor,to)
-    if (tempBoard[to[0]][to[1]].piece.name==='king') kingPosition=[to[0],to[1]]
-    return diagonalCheck(tempBoard,color,kingPosition) || UpDownLeftRightCheck(tempBoard,color,kingPosition) 
 
+    let tempPiece=tempBoard[x][y].piece
+    let tempName=tempPiece.name,tempColor=tempPiece.color,tempPosition=tempPiece.position
+    tempBoard[x][y]=generateEmptySquare()
+    tempBoard[a][b]=generatePiece(tempName,tempColor,tempPosition)
+    if (tempBoard[to[0]][to[1]].piece && tempBoard[to[0]][to[1]].name==='king') kingPosition=[to[0],to[1]]
+    return diagonalCheck(tempBoard,color,kingPosition) || UpDownLeftRightCheck(tempBoard,color,kingPosition) 
 
 }
 
 
 function copyBoard(board: any):any{
-    return [...board]
+    let copy=[]
+    for (let i=0;i<board.length;i++)
+        copy[i]=[...board[i]]
+
+    return  copy
 
 }
 

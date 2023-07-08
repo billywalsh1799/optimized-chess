@@ -35,12 +35,13 @@ export class BoardService {
     if (this.board[i][j].piece && this.selectedPiece===null && this.legalMoves.length){
       this.selectedPiece=this.board[i][j].piece
       this.board[i][j].isSelected=true
-      let {name,position,color}=this.selectedPiece
+      
       //possible moves and captures
       
     
 
-      this.selectedPieceMoves=possibleMoves(name,position,color,this.board,color==="white"? this.whiteKingPosition:this.blackKingPosition)
+      //this.selectedPieceMoves=possibleMoves(name,position,color,this.board,color==="white"? this.whiteKingPosition:this.blackKingPosition)
+      this.selectedPieceMoves=this.legalMoves[i][j]
       showPossibleMoves(this.selectedPieceMoves,this.board)
 
 
@@ -85,6 +86,10 @@ export class BoardService {
 
         this.board[xb][yb].inCapture=blackcheck 
         this.board[xw][yw].inCapture=whitecheck
+
+        //refill legalmoves
+        let turn=this.selectedPiece.color==="white" ? this.blackKingPosition : this.whiteKingPosition
+        this.legalMoves=checkLegalMoves(this.board,turn)
           
 
 
@@ -103,7 +108,9 @@ export class BoardService {
         cleanUp(this.selectedPieceMoves,this.board)
         this.selectedPiece=this.board[i][j].piece
         let {name,color,position}=this.selectedPiece
-        this.selectedPieceMoves=possibleMoves(name,position,color,this.board,color==="white"? this.whiteKingPosition:this.blackKingPosition)
+
+        //this.selectedPieceMoves=possibleMoves(name,position,color,this.board,color==="white"? this.whiteKingPosition:this.blackKingPosition)
+        this.selectedPieceMoves=this.legalMoves[i][j]
         showPossibleMoves(this.selectedPieceMoves,this.board)
         this.board[i][j].isSelected=true
         this.board[x][y].isSelected=false

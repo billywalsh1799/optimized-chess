@@ -16,7 +16,7 @@ export class BoardComponent {
   }
 
   makeMove(i:number,j:number):void{
-    console.log(this.board[i][j])
+    /* console.log(this.board[i][j]) */
     this.boardservice.clickPiece(i,j)
   }
 
